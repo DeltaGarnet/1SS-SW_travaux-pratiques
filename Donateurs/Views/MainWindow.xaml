@@ -1,0 +1,85 @@
+﻿<Window x:Class="Donateurs.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Donateurs.Views"
+        xmlns:vm="clr-namespace:Donateurs.ViewModels"
+        xmlns:converters="clr-namespace:Donateurs.Converters"
+        xmlns:res="clr-namespace:Donateurs.Properties"
+        mc:Ignorable="d"
+        Title="Analyse des Contributions" Height="450" Width="800"
+        Icon="Resources/Images/election.ico">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:IllegalContributionConverter x:Key="IllegalConverter"/>
+        <!-- Styles pour les boutons et autres éléments -->
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <!-- Menu -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Configuration" 
+                      Command="{Binding OpenConfigurationCommand}"/>
+        </Menu>
+
+        <!-- Barre d'outils -->
+        <ToolBar DockPanel.Dock="Top">
+            <Button Content="{x:Static res:translation.ImportCsv}" 
+                    Command="{Binding ImportCsvCommand}"/>
+            <Button Content="{x:Static res:translation.Clear}" 
+                    Command="{Binding ClearContributionsCommand}"/>
+            <CheckBox Content="{x:Static res:translation.ShowOnlyIllegal}"
+                      IsChecked="{Binding ShowOnlyIllegal}"
+                      Command="{Binding ToggleFilterCommand}"/>
+        </ToolBar>
+
+        <!-- Zone de statut -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="{Binding ContributionCount, 
+                                      StringFormat='{x:Static res:translation.ContributionCountFormat}'}"/>
+        </StatusBar>
+
+        <!-- Liste principale -->
+        <ListView ItemsSource="{Binding FilteredContributions}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="{x:Static res:translation.EntityType}" 
+                                    DisplayMemberBinding="{Binding Type}"/>
+                    <GridViewColumn Header="{x:Static res:translation.Name}" 
+                                    DisplayMemberBinding="{Binding Nom}"/>
+                    <GridViewColumn Header="{x:Static res:translation.FirstName}" 
+                                    DisplayMemberBinding="{Binding Prenom}"/>
+                    <GridViewColumn Header="{x:Static res:translation.Amount}" 
+                                    DisplayMemberBinding="{Binding Montant, StringFormat=C}"/>
+                    <GridViewColumn Header="{x:Static res:translation.PaymentCount}" 
+                                    DisplayMemberBinding="{Binding NbVersements}"/>
+                    <GridViewColumn Header="{x:Static res:translation.City}" 
+                                    DisplayMemberBinding="{Binding Municipalite}"/>
+                    <GridViewColumn Header="{x:Static res:translation.PostalCode}" 
+                                    DisplayMemberBinding="{Binding CodePostal}"/>
+                    <GridViewColumn Header="{x:Static res:translation.PoliticalEntity}" 
+                                    DisplayMemberBinding="{Binding Parti}"/>
+                    <GridViewColumn Header="{x:Static res:translation.Candidate}" 
+                                    DisplayMemberBinding="{Binding Candidat}"/>
+                    <GridViewColumn Header="{x:Static res:translation.Year}" 
+                                    DisplayMemberBinding="{Binding AnneeFinanciere}"/>
+                    <GridViewColumn Header="{x:Static res:translation.IllegalQuestion}">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <Binding Path="EstIllegale" Converter="{StaticResource IllegalConverter}"/>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</Window>
