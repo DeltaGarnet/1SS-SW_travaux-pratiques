@@ -1,0 +1,40 @@
+﻿<Window x:Class="DetectLanguageApp.Views.ConfigurationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:DetectLanguageApp.ViewModels"
+        mc:Ignorable="d"
+        Title="Configuration du Jeton API" 
+        Height="250" Width="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        d:DataContext="{d:DesignInstance viewmodels:ConfigurationViewModel}">
+
+    <Window.DataContext>
+        <viewmodels:ConfigurationViewModel/>
+    </Window.DataContext>
+
+    <StackPanel Margin="20">
+        <TextBlock Text="Veuillez saisir votre jeton d'API (Token) pour DetectLanguage.com." 
+                   TextWrapping="Wrap" 
+                   Margin="0,0,0,10"/>
+
+        <Label Content="Jeton d'API :"/>
+        <TextBox Text="{Binding ApiToken, UpdateSourceTrigger=PropertyChanged}" 
+                 Margin="0,0,0,20"/>
+
+        <Button Content="Enregistrer et Fermer" 
+                Command="{Binding SaveCommand}"
+                HorizontalAlignment="Right" 
+                Padding="10,5"/>
+
+        <TextBlock Text="Le jeton est stocké dans la configuration de l'utilisateur."
+                   FontStyle="Italic"
+                   FontSize="10"
+                   Foreground="Gray"
+                   HorizontalAlignment="Right"
+                   Margin="0,10,0,0"/>
+    </StackPanel>
+</Window>
